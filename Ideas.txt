@@ -1,0 +1,30 @@
+Stuck in a Loop (dungeon crawler)
+-Procedural generated game with endless floors
+-story
+	-You have to save a princess
+	-You are stuck in an endless loop of fighting monsters and looting dungeons
+	
+-Enemies
+	-Slime (Color changes difficulty)
+	-Bats  (Red bats are fire bats?)
+	-Skeletons
+	-Spiders
+	-Haunted Armor
+	-Ghosts
+	-Bosses?
+		-Dragon
+		
+-Upgrades
+	-Extra life
+	-Extra damage
+	-Less damages taken
+	-Bigger sword
+	-Luck up
+	
+-Weapons
+	-Sword
+	-Boomerang
+	-Flame Sword
+	-Bow and Arrow
+	
+-Currency and merchants
