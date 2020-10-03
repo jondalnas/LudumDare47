@@ -2,9 +2,8 @@ package com.Jonas.SJGE.tilemap;
 
 import com.Jonas.SJGE.Game;
 import com.Jonas.SJGE.screen.Screen;
-import com.Jonas.SJGE.tilemap.tiles.Grass;
 import com.Jonas.SJGE.tilemap.tiles.Tile;
-import com.Jonas.SJGE.tilemap.tiles.Tree;
+import com.Jonas.SJGE.tilemap.tiles.VoidTile;
 
 public class Tilemap {
 	private final Tile[] tilemap;
@@ -16,7 +15,7 @@ public class Tilemap {
 	public static Tile OOB_TILE;
 	
 	public Tilemap(Game game) {
-		OOB_TILE = new Tree(game);
+		OOB_TILE = new VoidTile(game);
 		
 		this.game = game;
 		

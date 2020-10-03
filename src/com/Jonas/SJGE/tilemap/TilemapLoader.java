@@ -59,6 +59,12 @@ public class TilemapLoader {
 				int col = pixels[x+y*width] & 0xffffff;
 				int entity = (pixels[x+y*width] >> 24) & 0xff;
 				
+				try {
+					tm[x+y*width] = (Tile) Class.forName(Tile.class.getPackage().getName() + ".VoidTile").getDeclaredConstructor(Game.class).newInstance(game);
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				
 				for (TileColor tc : TileColor.values()) {
 					if (tc.color == col) {
 						try {
@@ -96,8 +102,9 @@ public class TilemapLoader {
 }
 
 enum TileColor {
-	grass(0x00ff00),
-	rock(0xaaaaaa);
+	voidTile(0),
+	wall(0xaaaaaa),
+	floor(0x888888);
 	
 	int color;
 	TileColor(int color) {
@@ -106,7 +113,7 @@ enum TileColor {
 }
 
 enum EntityColor {
-	bigTree(0xfe);
+	player(0x88);
 	
 	int color;
 	EntityColor(int color) {

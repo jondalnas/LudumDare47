@@ -38,6 +38,8 @@ public abstract class Entity {
 				}
 
 				for (Entity e : game.entities) {
+					if (e == this) continue;
+					
 					if (e.x + e.xColOffs > x2 + xColOffs + sizeD - 1 ||
 						e.y + e.yColOffs > y + yColOffs + sizeD - 1 ||
 						e.x + e.xColOffs + e.sizeD < x2 + xColOffs + 1 ||
@@ -72,6 +74,8 @@ public abstract class Entity {
 				}
 				
 				for (Entity e : game.entities) {
+					if (e == this) continue;
+					
 					if (e.x + e.xColOffs > x + xColOffs + sizeD - 1 ||
 						e.y + e.yColOffs > y2 + yColOffs + sizeD - 1 ||
 						e.x + e.xColOffs + e.sizeD < x + xColOffs + 1 ||
