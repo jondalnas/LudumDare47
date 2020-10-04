@@ -5,8 +5,8 @@ Stuck in a Loop (dungeon crawler)
 	-You are stuck in an endless loop of fighting monsters and looting dungeons
 	
 -Enemies
-	-Slime (Color changes difficulty)
-	-Bats  (Red bats are fire bats?)
+	+Slime (Color changes difficulty)
+	+Bats  (Red bats are fire bats?)
 	-Skeletons
 	-Spiders
 	-Haunted Armor
@@ -22,7 +22,7 @@ Stuck in a Loop (dungeon crawler)
 	-Luck up
 	
 -Weapons
-	-Sword
+	+Sword
 	-Boomerang
 	-Flame Sword
 	-Bow and Arrow

@@ -3,6 +3,7 @@ package com.Jonas.SJGE.tilemap;
 import com.Jonas.SJGE.Game;
 import com.Jonas.SJGE.screen.Screen;
 import com.Jonas.SJGE.tilemap.tiles.Tile;
+import com.Jonas.SJGE.tilemap.tiles.TilemapGenerator;
 import com.Jonas.SJGE.tilemap.tiles.VoidTile;
 
 public class Tilemap {
@@ -19,7 +20,8 @@ public class Tilemap {
 		
 		this.game = game;
 		
-		TilemapLoader.LoadedMap loadedMap = TilemapLoader.load("res/lvl/level 1.png", game);
+		//TilemapLoader.LoadedMap loadedMap = TilemapLoader.load("res/lvl/level 1.png", game);
+		TilemapLoader.LoadedMap loadedMap = TilemapLoader.load(TilemapGenerator.generate(new TilemapGenerator(), 128, 128, 10 * game.currentFloor), game);
 		tilemap = loadedMap.getTilemap();
 		width = loadedMap.getWidth();
 		height = loadedMap.getHeight();

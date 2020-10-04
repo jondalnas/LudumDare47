@@ -35,15 +35,7 @@ public class TilemapLoader {
 		}
 	}
 	
-	public static LoadedMap load(String map, Game game) {
-		BufferedImage bi;
-		
-		try {
-			bi = ImageIO.read(new File(map));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
+	public static LoadedMap load(BufferedImage bi, Game game) {
 		int width = bi.getWidth();
 		int height = bi.getHeight();
 		
@@ -84,7 +76,7 @@ public class TilemapLoader {
 				for (EntityColor ec : EntityColor.values()) {
 					if (ec.color == entity) {
 						try {
-							game.entities.add((Entity) Class.forName(Entity.class.getPackage().getName() + "." + (ec.name().charAt(0) + "").toUpperCase() + ec.name().substring(1)).getDeclaredConstructor(Game.class, int.class, int.class).newInstance(game, x * Tilemap.TILE_SIZE, y * Tilemap.TILE_SIZE));
+							game.addEntity((Entity) Class.forName(Entity.class.getPackage().getName() + "." + (ec.name().charAt(0) + "").toUpperCase() + ec.name().substring(1)).getDeclaredConstructor(Game.class, int.class, int.class).newInstance(game, x * Tilemap.TILE_SIZE, y * Tilemap.TILE_SIZE));
 							break;
 						} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 							throw new RuntimeException(e);
@@ -99,24 +91,46 @@ public class TilemapLoader {
 		
 		return new TilemapLoader().new LoadedMap(tm, bi.getWidth(), bi.getHeight());
 	}
-}
-
-enum TileColor {
-	voidTile(0),
-	wall(0xaaaaaa),
-	floor(0x888888);
 	
-	int color;
-	TileColor(int color) {
-		this.color = color;
+	public static LoadedMap load(String map, Game game) {
+		BufferedImage bi;
+		
+		try {
+			bi = ImageIO.read(new File(map));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return load(bi, game);
 	}
-}
 
-enum EntityColor {
-	player(0x88);
+	public enum EntityColor {
+		player(0x88),
+		slime(0x70, 3),
+		bat(0x74, 3),
+		skeleton(0x78, 10),
+		spider(0x7a, 1);
 	
-	int color;
-	EntityColor(int color) {
-		this.color = color;
+		public int color;
+		public int difficulty = -1;
+		EntityColor(int color) {
+			this.color = color;
+		}
+		
+		EntityColor(int color, int difficulty) {
+			this.color = color;
+			this.difficulty = difficulty;
+		}
+	}
+
+	public enum TileColor {
+		voidTile(0),
+		wall(0xaaaaaa),
+		floor(0x888888);
+		
+		public int color;
+		TileColor(int color) {
+			this.color = color;
+		}
 	}
 }

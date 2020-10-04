@@ -21,4 +21,12 @@ public class Input implements KeyListener {
 	public boolean getKeyDown(char ch) {
 		return keys[ch-97+KeyEvent.VK_A];
 	}
+	
+	public boolean getButtonPressed(int button) {
+		boolean key = keys[button];
+		
+		keys[button] = false;
+		
+		return key;
+	}
 }

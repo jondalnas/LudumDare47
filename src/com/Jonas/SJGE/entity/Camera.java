@@ -5,7 +5,7 @@ import com.Jonas.SJGE.screen.Screen;
 
 public class Camera extends Entity {
 	public Camera(Game game) {
-		super(game);
+		super(game, 0, 0);
 		
 		sizeD = 16;
 
