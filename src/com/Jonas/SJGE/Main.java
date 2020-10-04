@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import com.Jonas.SJGE.screen.ImageLoader;
 import com.Jonas.SJGE.screen.Renderer;
+import com.Jonas.SJGE.sound.Sound;
 
 public class Main implements Runnable {
 	private static Renderer renderer;
@@ -17,6 +18,7 @@ public class Main implements Runnable {
 	
 	public Main() {
 		new ImageLoader();
+		new Sound();
 	}
 	
 	public static void main(String[] args) {

@@ -4,6 +4,7 @@ import com.Jonas.SJGE.Game;
 import com.Jonas.SJGE.Main;
 import com.Jonas.SJGE.screen.ImageLoader;
 import com.Jonas.SJGE.screen.Screen;
+import com.Jonas.SJGE.sound.Sound;
 
 public class Bat extends Enemy {
 	private final double flapTime = 0.125;
@@ -18,12 +19,21 @@ public class Bat extends Enemy {
 	private byte attackDirection = 1;
 	
 	public Bat(Game game, int x, int y) {
-		super(game, x, y, 2);
+		super(game, x, y, 2, Sound.HIT, Sound.HIT_BIG);
 		
 		sizeD = 8;
 	}
 
 	public void update() {
+		if ((knockbackTime -= Main.getDeltaTime()) > 0) {
+			dx += hurtVelocityX;
+			dy += hurtVelocityY;
+			
+			move();
+			
+			return;
+		}
+		
 		double xx = game.player.x - x;
 		double yy = game.player.y - y;
 		
@@ -35,6 +45,8 @@ public class Bat extends Enemy {
 			flapTimer = flapTime;
 			anim++;
 			anim %= 2;
+			
+			if (anim == 1) Sound.BAT_FLAPPING.play();
 		}
 		
 		if (distance > attackRadius * attackRadius || (attackTimer -= Main.getDeltaTime()) < 0) {
@@ -62,6 +74,7 @@ public class Bat extends Enemy {
 	}
 
 	public void render(Screen screen) {
+		screen.screen.drawWithColor(ImageLoader.tilemap, 0x212121, x - game.cam.x, y - game.cam.y + 6, 7 * 8, 22 * 8, 8, 8);
 		screen.screen.draw(ImageLoader.tilemap, x - game.cam.x, y - game.cam.y, 4 * 8, (14 + anim) * 8, 8, 8);
 	}
 

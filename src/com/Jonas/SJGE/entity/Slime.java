@@ -4,6 +4,7 @@ import com.Jonas.SJGE.Game;
 import com.Jonas.SJGE.Main;
 import com.Jonas.SJGE.screen.ImageLoader;
 import com.Jonas.SJGE.screen.Screen;
+import com.Jonas.SJGE.sound.Sound;
 
 public class Slime extends Enemy {
 	private final double jumpTime = 1.5;
@@ -15,7 +16,7 @@ public class Slime extends Enemy {
 	private double velocityX, velocityY;
 	
 	public Slime(Game game, int x, int y) {
-		super(game, x, y, 2);
+		super(game, x, y, 2, Sound.HIT_SOFT, Sound.HIT_BIG);
 		
 		sizeD = 8;
 		
@@ -23,6 +24,15 @@ public class Slime extends Enemy {
 	}
 
 	public void update() {
+		if ((knockbackTime -= Main.getDeltaTime()) > 0) {
+			dx += hurtVelocityX;
+			dy += hurtVelocityY;
+			
+			move();
+			
+			return;
+		}
+		
 		double xx = game.player.x - x;
 		double yy = game.player.y - y;
 		
@@ -54,6 +64,8 @@ public class Slime extends Enemy {
 			
 			velocityX = (xx * jumpSpeed * Main.getDeltaTime());
 			velocityY = (yy * jumpSpeed * Main.getDeltaTime());
+			
+			Sound.JUMP.play();
 		}
 		
 		dx += velocityX;
@@ -74,7 +86,8 @@ public class Slime extends Enemy {
 	public void render(Screen screen) {
 		//renderEntity(screen, location);
 		//screen.screen.draw(0x00ff00, x - game.cam.x, y - game.cam.y - (jumpTimer < 0 ? jumpHeight : 0), sizeD, sizeD);
-		screen.screen.draw(ImageLoader.tilemap, x - game.cam.x, y - game.cam.y - (jumpTimer < 0 ? jumpHeight : 0), direction * 8, 7 * 16 + (jumpTimer < 0 ? 8 : 0), 8, 8);
+		if (jumpTimer < 0 || knockbackTime > 0) screen.screen.drawWithColor(ImageLoader.tilemap, 0x212121, x - game.cam.x, y - game.cam.y, 7 * 8, 22 * 8, 8, 8);
+		screen.screen.draw(ImageLoader.tilemap, x - game.cam.x, y - game.cam.y - ((jumpTimer < 0 || knockbackTime > 0) ? jumpHeight : 0), direction * 8, 7 * 16 + ((jumpTimer < 0 || knockbackTime > 0) ? 8 : 0), 8, 8);
 	}
 
  	public boolean collide(Entity e) {

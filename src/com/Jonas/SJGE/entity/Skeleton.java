@@ -4,6 +4,7 @@ import com.Jonas.SJGE.Game;
 import com.Jonas.SJGE.Main;
 import com.Jonas.SJGE.screen.ImageLoader;
 import com.Jonas.SJGE.screen.Screen;
+import com.Jonas.SJGE.sound.Sound;
 
 public class Skeleton extends Enemy {
 	private final double speed = 60;
@@ -15,10 +16,19 @@ public class Skeleton extends Enemy {
 	private double walkingAnimTime = 0;
 
 	public Skeleton(Game game, int x, int y) {
-		super(game, x, y, 4);
+		super(game, x, y, 4, Sound.HIT_BIG, Sound.HIT_BIG);
 	}
 
 	public void update() {
+		if ((knockbackTime -= Main.getDeltaTime()) > 0) {
+			dx += hurtVelocityX;
+			dy += hurtVelocityY;
+			
+			move();
+			
+			return;
+		}
+		
 		double xx = game.player.x - x;
 		double yy = game.player.y - y;
 		
@@ -41,6 +51,8 @@ public class Skeleton extends Enemy {
 				walkingAnimCount = (byte) ((++walkingAnimCount) % 4);
 				
 				walkingAnim = (byte) (walkingAnimCount == 0 ? 0 : (walkingAnimCount == 1 ? 1 : (walkingAnimCount == 2 ? 0 : (walkingAnimCount == 3 ? 2 : 0))));
+				
+				if (walkingAnim == 0) Sound.SKELETON_STEP.play();
 			}
 		} else {
 			walkingAnim = 0;
@@ -65,6 +77,7 @@ public class Skeleton extends Enemy {
 	}
 
 	public void render(Screen screen) {
+		screen.screen.drawWithColor(ImageLoader.tilemap, 0x212121, x - game.cam.x, y - game.cam.y + 2, 4 * 16, 3 * 16, 16, 16);
 		screen.screen.draw(ImageLoader.tilemap, x - game.cam.x, y - game.cam.y, direction * 16, (8 + walkingAnim) * 16, 16, 16);
 	}
 

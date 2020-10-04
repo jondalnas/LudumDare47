@@ -6,10 +6,14 @@ import com.Jonas.SJGE.screen.Screen;
 public class Wall extends Tile {
 	private byte type = -1;
 	
+	private byte decoration;
+	
 	public Wall(Game game) {
 		super(game);
 		
 		solid = true;
+		
+		decoration = (byte) ((Math.random() * 4) % 3);
 	}
 
 	public void tick() {
@@ -51,27 +55,27 @@ public class Wall extends Tile {
 		}
 		
 		if ((type & 0b00000010) != 0) {
-			renderTile(screen, 2, x, y);
-		}
-		
-		if ((type & 0b00000100) != 0) {
-			renderTile(screen, 1, x, y);
-		}
-		
-		if ((type & 0b00001000) != 0) {
-			renderTile(screen, 3, x, y);
-		}
-		
-		if ((type & 0b00010000) != 0) {
-			renderTile(screen, 5, x, y);
-		}
-		
-		if ((type & 0b00100000) != 0) {
 			renderTile(screen, 4, x, y);
 		}
 		
+		if ((type & 0b00000100) != 0) {
+			renderTile(screen, 3, x, y);
+		}
+		
+		if ((type & 0b00001000) != 0) {
+			renderTile(screen, 5, x, y);
+		}
+		
+		if ((type & 0b00010000) != 0) {
+			renderTile(screen, 7, x, y);
+		}
+		
+		if ((type & 0b00100000) != 0) {
+			renderTile(screen, 6, x, y);
+		}
+		
 		if ((type & 0b00000001) != 0) {
-			renderTile(screen, 0, x, y);
+			renderTile(screen, 0 + decoration, x, y);
 		}
 	}
 }

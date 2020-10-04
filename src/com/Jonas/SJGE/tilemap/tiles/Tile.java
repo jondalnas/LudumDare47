@@ -1,6 +1,8 @@
 package com.Jonas.SJGE.tilemap.tiles;
 
 import com.Jonas.SJGE.Game;
+import com.Jonas.SJGE.entity.Entity;
+import com.Jonas.SJGE.entity.Ghost;
 import com.Jonas.SJGE.screen.ImageLoader;
 import com.Jonas.SJGE.screen.Screen;
 import com.Jonas.SJGE.tilemap.Tilemap;
@@ -23,5 +25,11 @@ public abstract class Tile {
 	}
 	protected void renderTile(Screen screen, int tilemapLocation, int x, int y) {
 		screen.screen.draw(ImageLoader.tilemap, x * Tilemap.TILE_SIZE - game.cam.x, y * Tilemap.TILE_SIZE - game.cam.y, (tilemapLocation % 16) * Tilemap.TILE_SIZE, (tilemapLocation / 16) * Tilemap.TILE_SIZE, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
+	}
+
+	public boolean isSolid(Entity e) {
+		if (e instanceof Ghost) return false;
+		
+		return solid;
 	}
 }

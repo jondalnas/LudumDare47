@@ -7,7 +7,8 @@ public class Floor extends Tile {
 	public Floor(Game game) {
 		super(game);
 		
-		tilemapLocation = 0+1*16;
+		tilemapLocation = (int) ((Math.random() * 4) % 3)+1*16;
+		if (Math.random() < 0.25) tilemapLocation += Math.random() * 3;
 	}
 
 	public void tick() {

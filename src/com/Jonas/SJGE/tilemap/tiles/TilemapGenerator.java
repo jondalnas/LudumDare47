@@ -19,8 +19,11 @@ public class TilemapGenerator extends Canvas {
 	private static final long serialVersionUID = 1L;
 	private final static int MIN_ROOM_SIZE = 3, MAX_ROOM_SIZE = 5;
 	private final static int MIN_ROOM_DISTANCE = 3;
-	private final static int MAX_ROOM_COUNT = 10;
 	private final static int CORRIDOR_WIDTH = 2;
+	private final static double STAIRWELL_CHANCE = 0.5;
+	private final static double STAIRWELL_DIFFICULTY_BOOST = 2;
+	private final static double CHEST_DIFFICULTY_BOOST = 2;
+	private final static double CHEST_SPAWN_CHANCE = 0.2;
 
 	public static void main(String[] args) {
 		TilemapGenerator tmg = new TilemapGenerator();
@@ -160,17 +163,67 @@ public class TilemapGenerator extends Canvas {
 		}
 		
 		scaledPixels[bi.getWidth()/2 + bi.getHeight()/2 * bi.getWidth()] = (0x88 << 24) | (scaledPixels[bi.getWidth()/2 + bi.getHeight()/2 * bi.getWidth()] & 0xffffff);
+
+		//Make sure the spawn room is untouched
+		rooms.remove(0);
+		
+		//Generate stairwell
+		for (int i = rooms.size() - 1; i >= 0; i--) {
+			int bestDistance = Integer.MAX_VALUE;
+			int bestIndex = -1;
+			
+			for (int o = i; o >= 0; o--) {
+				int distanceX = rooms.get(o).getCenterX() - (width << 1);
+				int distanceY = rooms.get(o).getCenterY() - (height << 1);
+				
+				int distance = distanceX * distanceX + distanceY * distanceY;
+				
+				if (distance < bestDistance) {
+					bestDistance = distance;
+					bestIndex = o;
+				}
+			}
+			
+			rooms.add(rooms.get(bestIndex));
+			rooms.remove(bestIndex);
+		}
+
+		for (int i = rooms.size() - 1; i >= 0; i--) {
+			if (Math.random() < STAIRWELL_CHANCE) {
+				int x = (int) (Math.random() * ((rooms.get(i).w << 2) - 4)) + (rooms.get(i).x << 2) + 2;
+				int y = (int) (Math.random() * ((rooms.get(i).h << 2) - 4)) + (rooms.get(i).y << 2) + 2;
+				
+				scaledPixels[x + y * (width << 2)] = (scaledPixels[x + y * (width << 2)] & 0xff000000) | (0xff0000);
+				
+				rooms.get(i).setStairwell();
+				
+				break;
+			}
+		}
 		
 		//TODO: Add enemies and treasure here
-		rooms.remove(0);
 		for (Room r : rooms) {
+			double difficultyModified = difficulty * (r.hasStairwell() ? STAIRWELL_DIFFICULTY_BOOST : 1);
+			
+			//Spawn chest
+			if (!r.hasStairwell()) {
+				if (Math.random() < CHEST_SPAWN_CHANCE) {
+					if (scaledPixels[(r.getCenterX() << 2) + (r.getCenterY() << 2) * (width << 2)] == 0xff888888) {
+						scaledPixels[(r.getCenterX() << 2) + (r.getCenterY() << 2) * (width << 2)] = (getChestLoot() << 24) | (scaledPixels[(r.getCenterX() << 2) + (r.getCenterY() << 2) * (width << 2)] & 0xffffff);
+						
+						difficultyModified *= CHEST_DIFFICULTY_BOOST;
+					}
+				}
+			}
+			
+			//Spawn enemy
 			int currDifficulty = 0;
 			
 			List<Integer> enemies = new ArrayList<Integer>();
 			
-			while (currDifficulty < difficulty) {
+			while (currDifficulty < difficultyModified) {
 				int index = (int) (Math.random() * TilemapLoader.EntityColor.values().length);
-				if (TilemapLoader.EntityColor.values()[index].difficulty > 0 && TilemapLoader.EntityColor.values()[index].difficulty + currDifficulty <= difficulty) {
+				if (TilemapLoader.EntityColor.values()[index].difficulty > 0 && TilemapLoader.EntityColor.values()[index].difficulty + currDifficulty <= difficultyModified) {
 					currDifficulty += TilemapLoader.EntityColor.values()[index].difficulty;
 					
 					enemies.add(TilemapLoader.EntityColor.values()[index].color);
@@ -186,6 +239,13 @@ public class TilemapGenerator extends Canvas {
 		}
 		
 		return bi;
+	}
+	
+	private static byte getChestLoot() {
+		if (Math.random() < 0.10) return 0x01; //Life up 10%
+		if (Math.random() < 0.15) return 0x01; //Life up 15%
+		
+		return 0x00; //Extra life 75%
 	}
 	
 	private static void drawRoom(int[] pixels, int x, int y, int w, int h, int imageWidth, int imageHeight) {
@@ -301,6 +361,8 @@ public class TilemapGenerator extends Canvas {
 		public int x, y, w, h;
 		public List<int[]> exitPoints = new ArrayList<int[]>();
 		
+		private boolean hasStairwell = false;
+		
 		public Room(int x, int y, int w, int h) {
 			this.x = x;
 			this.y = y;
@@ -319,6 +381,14 @@ public class TilemapGenerator extends Canvas {
 		
 		public int getCenterY() {
 			return y+h/2;
+		}
+		
+		public void setStairwell() {
+			hasStairwell = true;
+		}
+		
+		public boolean hasStairwell() {
+			return hasStairwell;
 		}
 	}
 	

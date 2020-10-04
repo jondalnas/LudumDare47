@@ -106,10 +106,14 @@ public class TilemapLoader {
 
 	public enum EntityColor {
 		player(0x88),
+		healthChest(0x00),
+		healthUpChest(0x01),
+		damageUpChest(0x02),
 		slime(0x70, 3),
 		bat(0x74, 3),
 		skeleton(0x78, 10),
-		spider(0x7a, 1);
+		spider(0x7a, 1),
+		ghost(0x7c, 20);
 	
 		public int color;
 		public int difficulty = -1;
@@ -126,7 +130,8 @@ public class TilemapLoader {
 	public enum TileColor {
 		voidTile(0),
 		wall(0xaaaaaa),
-		floor(0x888888);
+		floor(0x888888),
+		stairwell(0xff0000);
 		
 		public int color;
 		TileColor(int color) {

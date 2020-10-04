@@ -4,6 +4,7 @@ import com.Jonas.SJGE.Game;
 import com.Jonas.SJGE.Main;
 import com.Jonas.SJGE.screen.ImageLoader;
 import com.Jonas.SJGE.screen.Screen;
+import com.Jonas.SJGE.sound.Sound;
 
 public class Spider extends Enemy {
 	private final double walkTime = 0.064;
@@ -22,12 +23,21 @@ public class Spider extends Enemy {
 	private double wanderingTime;
 
 	public Spider(Game game, int x, int y) {
-		super(game, x, y, 1);
+		super(game, x, y, 1, Sound.HIT, Sound.HIT_BIG);
 		
 		sizeD = 8;
 	}
 
 	public void update() {
+		if ((knockbackTime -= Main.getDeltaTime()) > 0) {
+			dx += hurtVelocityX;
+			dy += hurtVelocityY;
+			
+			move();
+			
+			return;
+		}
+		
 		double xx = game.player.x - x;
 		double yy = game.player.y - y;
 		
@@ -66,6 +76,8 @@ public class Spider extends Enemy {
 				walkTimer = walkTime;
 				anim++;
 				anim %= 2;
+				
+				if (distance < WAKEUP_RANGE * WAKEUP_RANGE) Sound.SPIDER_STEP.play();
 			}
 			
 			if (Math.abs(xx) > Math.abs(yy))

@@ -38,11 +38,14 @@ public abstract class Entity {
 				int y0 = (y+yColOffs)/Tilemap.TILE_SIZE;
 				int y1 = (y+yColOffs+sizeD-1)/Tilemap.TILE_SIZE;
 
+				boolean hitSolid = false;
 				for (int xt = x0; xt <= x1; xt++) {
 					for (int yt = y0; yt <= y1; yt++) {
-						if (game.tilemap.getTile(xt, yt).solid) continue dx;
+						if (game.tilemap.getTile(xt, yt).isSolid(this)) hitSolid = true;
 					}
 				}
+				
+				if (hitSolid) continue;
 
 				for (Entity e : game.entities) {
 					if (e == this) continue;
@@ -76,12 +79,15 @@ public abstract class Entity {
 				int x1 = (x+xColOffs+sizeD-1)/Tilemap.TILE_SIZE;
 				int y0 = (y2+yColOffs)/Tilemap.TILE_SIZE;
 				int y1 = (y2+yColOffs+sizeD-1)/Tilemap.TILE_SIZE;
-				
+
+				boolean hitSolid = false;
 				for (int xt = x0; xt <= x1; xt++) {
 					for (int yt = y0; yt <= y1; yt++) {
-						if (game.tilemap.getTile(xt, yt).solid) continue dy;
+						if (game.tilemap.getTile(xt, yt).isSolid(this)) hitSolid = true;
 					}
 				}
+				
+				if (hitSolid) continue;
 				
 				for (Entity e : game.entities) {
 					if (e == this) continue;

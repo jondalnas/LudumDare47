@@ -87,6 +87,29 @@ public class Bitmap {
 		}
 	}
 	
+	public void drawWithColor(Bitmap bitmap, int color, int x0, int y0, int xi, int yi, int wi, int hi) {
+		for (int y = 0; y < hi; y++) {
+			int yp = y + yi;
+			if (yp < 0 || yp >= bitmap.height) continue;
+
+			int yy = y + y0;
+			if (yy < 0 || yy >= height) continue;
+			
+			for (int x = 0; x < wi; x++) {
+				int xp = x + xi;
+				if (xp < 0 || xp >= bitmap.width) continue;
+				
+				int col = bitmap.pixels[xp + yp * bitmap.width];
+				if (col == 0xff00ff) continue;
+				
+				int xx = x + x0;
+				if (xx < 0 || xx >= width) continue;
+				
+				pixels[xx + yy * width] = col & color;
+			}
+		}
+	}
+	
 	public void draw(Bitmap bitmap, int x0, int y0, int xi, int yi, int wi, int hi, double rotation) {
 		if (Math.abs((int) rotation - rotation) < 0.001) {
 			draw(bitmap, x0, y0, xi, yi, wi, hi, (int) rotation);

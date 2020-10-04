@@ -1,20 +1,19 @@
 package com.Jonas.SJGE.screen;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 public class ImageLoader {
-	public static Bitmap pattern = loadImage("res/img/Pattern.png");
-	public static Bitmap tilemap = loadImage("res/img/Tilemap.png");
+	public static Bitmap pattern = loadImage("/img/Pattern.png");
+	public static Bitmap tilemap = loadImage("/img/Tilemap.png");
 	
 	private static Bitmap loadImage(String location) {
 		BufferedImage bi;
 		
 		try {
-			bi = ImageIO.read(new File(location));
+			bi = ImageIO.read(ImageLoader.class.getResource(location));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
