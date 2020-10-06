@@ -31,8 +31,10 @@ Stuck in a Loop (dungeon crawler)
 	-Bow and Arrow
 	-Flame Sword
 	
--Sound
--Add numbers when enemies take damage
++Sound
++Add numbers when enemies take damage
++Shadows
 
--Hurt animation
++Death animation
++Gray screen on death
 -Currency and merchants
